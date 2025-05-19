@@ -1,0 +1,142 @@
+/* Import font Poppins từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1e40af, #60a5fa);
+    color: #1f2937;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Container chính */
+.container {
+    max-width: 450px;
+    width: 90%;
+    margin: 2rem;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    animation: slideIn 0.8s ease-out;
+    text-align: center;
+}
+
+/* Hiệu ứng slide-in */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tiêu đề */
+h2 {
+    font-size: 2.2rem;
+    color: #1e40af;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #1e40af, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Thông báo lỗi */
+.error {
+    font-size: 1rem;
+    color: #dc2626;
+    background: #fef2f2;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+}
+
+/* Biểu mẫu */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+form div {
+    text-align: left;
+}
+
+label {
+    font-size: 1rem;
+    color: #4b5563;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.9rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #1e40af;
+    box-shadow: 0 0 8px rgba(30, 64, 175, 0.3);
+    outline: none;
+}
+
+/* Nút xác nhận */
+button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to right, #1e40af, #3b82f6);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(30, 64, 175, 0.4);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        padding: 2rem;
+        margin: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+
+    input[type="text"] {
+        padding: 0.8rem;
+    }
+}

@@ -1,0 +1,215 @@
+/* Import font Poppins từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1e40af, #60a5fa);
+    color: #1f2937;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Container chính */
+.container {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 3rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    animation: slideIn 0.8s ease-out;
+}
+
+/* Hiệu ứng slide-in */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tiêu đề bài kiểm tra */
+h2 {
+    font-size: 2.8rem;
+    color: #1e40af;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #1e40af, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Biểu mẫu bài kiểm tra */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Mỗi câu hỏi */
+.question {
+    background: #f8fafc;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 0.6s ease-out forwards;
+    animation-delay: calc(0.1s * var(--index));
+}
+
+.question:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Hiệu ứng fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.question p {
+    font-size: 1.2rem;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.question p strong {
+    color: #1e40af;
+}
+
+/* Tùy chọn câu trả lời */
+.question label {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.question label:hover {
+    color: #1e40af;
+}
+
+.question input[type="radio"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: #1e40af;
+    cursor: pointer;
+}
+
+/* Nút nộp bài */
+button {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to right, #10b981, #059669);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+/* Liên kết quay lại */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    color: #ffffff;
+    background: linear-gradient(to right, #f59e0b, #f97316);
+    padding: 0.8rem 1.8rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.back-link::before {
+    content: '←';
+    font-size: 1.1rem;
+}
+
+.back-link:hover {
+    background: linear-gradient(to right, #d97706, #ea580c);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+    transform: translateY(-3px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        margin: 2rem;
+        padding: 2rem;
+    }
+
+    h2 {
+        font-size: 2.2rem;
+    }
+
+    .question {
+        padding: 1.5rem;
+    }
+
+    .question p {
+        font-size: 1.1rem;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    .question {
+        padding: 1.2rem;
+    }
+
+    .question p {
+        font-size: 1rem;
+    }
+
+    .question label {
+        font-size: 0.9rem;
+    }
+}

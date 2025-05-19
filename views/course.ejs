@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= course.name %></title>
+    <link rel="stylesheet" href="/css/course_styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2><%= course.name %></h2>
+      <img
+        src="<%= course.logo %>"
+        alt="<%= course.name %>"
+        style="width: 200px"
+      />
+      <p>
+        Thời gian bắt đầu: <%= new Date(course.startDate).toLocaleDateString()
+        %>
+      </p>
+      <p>Thời gian học: <%= course.duration %> tháng</p>
+      <p>Số người tham gia: <%= course.enrolledCount %></p>
+      <% if (user.role === 'admin') { %>
+      <a href="/courses/edit/<%= course._id %>">Chỉnh sửa</a> |
+      <form
+        action="/courses/delete/<%= course._id %>"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit">Xóa</button>
+      </form>
+      <% } %>
+      <h3>Bài học</h3>
+      <% if (lessons.length === 0) { %>
+      <p>Chưa có bài học nào.</p>
+      <% } else { %>
+      <ul>
+        <% lessons.forEach(lesson => { %>
+        <li>
+          <a href="/lessons/view/<%= lesson._id %>"><%= lesson.name %></a>
+          <% if (user.role === 'admin') { %>
+          <a href="/lessons/edit/<%= lesson._id %>">Chỉnh sửa</a> |
+          <form
+            action="/lessons/delete/<%= lesson._id %>"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit">Xóa</button>
+          </form>
+          <% } %>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %> <% if (user.role === 'admin') { %>
+      <a href="/lessons/create/<%= course._id %>">Tạo bài học mới</a>
+      <% } %>
+      <h3>Bài kiểm tra</h3>
+      <% if (quizzes.length === 0) { %>
+      <p>Chưa có bài kiểm tra nào.</p>
+      <% } else { %>
+      <ul>
+        <% quizzes.forEach(quiz => { %>
+        <li>
+          <a href="/quizzes/view/<%= quiz._id %>"><%= quiz.name %></a>
+          <% if (user.role === 'admin') { %>
+          <a href="/quizzes/edit/<%= quiz._id %>">Chỉnh sửa</a> |
+          <form
+            action="/quizzes/delete/<%= quiz._id %>"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit">Xóa</button>
+          </form>
+          <% } %>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %> <% if (user.role === 'admin') { %>
+      <a href="/quizzes/create/<%= course._id %>">Tạo bài kiểm tra mới</a>
+      <% } %>
+      <br /><a href="/users/courses">Quay lại khóa học của tôi</a>
+    </div>
+  </body>
+</html>

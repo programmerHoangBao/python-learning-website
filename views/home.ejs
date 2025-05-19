@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang chủ</title>
+    <link rel="stylesheet" href="/css/home_styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Chào mừng <%= user.username %></h2>
+      <div class="nav-links">
+        <% if (user.role === 'admin') { %>
+        <a href="/courses/create" class="create">Tạo khóa học mới</a>
+        <% } %>
+        <a href="/users/courses" class="courses">Khóa học của tôi</a> |
+        <a href="/auth/logout" class="logout">Đăng xuất</a>
+      </div>
+      <h3>Danh sách khóa học</h3>
+      <% if (courses.length === 0) { %>
+      <p>Chưa có khóa học nào.</p>
+      <% } else { %>
+      <ul>
+        <% courses.forEach(course => { %>
+        <li>
+          <img
+            src="<%= course.logo %>"
+            alt="<%= course.name %>"
+            style="width: 100px"
+          />
+          <h4><a href="/courses/<%= course._id %>"><%= course.name %></a></h4>
+          <p>
+            Thời gian bắt đầu: <%= new
+            Date(course.startDate).toLocaleDateString() %>
+          </p>
+          <p>Thời gian học: <%= course.duration %> tháng</p>
+          <p>Số người tham gia: <%= course.enrolledCount %></p>
+          <form action="/courses/register/<%= course._id %>" method="POST">
+            <button type="submit">Đăng ký</button>
+          </form>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </div>
+  </body>
+</html>

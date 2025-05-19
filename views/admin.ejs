@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản trị</title>
+    <link rel="stylesheet" href="/css/admin_styles.css" />
+    <script>
+      function addQuestion() {
+        const container = document.getElementById("questions-container");
+        const index = container.children.length;
+        const html = `
+        <div class="question">
+          <label>Câu hỏi ${index + 1}:</label>
+          <input type="text" name="questions[${index}][questionText]" required>
+          <label>Lựa chọn 1:</label>
+          <input type="text" name="questions[${index}][options][0]" required>
+          <label>Lựa chọn 2:</label>
+          <input type="text" name="questions[${index}][options][1]" required>
+          <label>Lựa chọn 3:</label>
+          <input type="text" name="questions[${index}][options][2]" required>
+          <label>Lựa chọn 4:</label>
+          <input type="text" name="questions[${index}][options][3]" required>
+          <label>Đáp án đúng (0-3):</label>
+          <input type="number" name="questions[${index}][correctOption]" min="0" max="3" required>
+        </div>`;
+        container.insertAdjacentHTML("beforeend", html);
+      }
+
+      function updateYoutubePreview(input) {
+        const url = input.value;
+        const iframe = document.getElementById("youtube-preview");
+        const match = url.match(
+          /(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/
+        );
+        if (match && match[1]) {
+          iframe.src = `https://www.youtube.com/embed/${match[1]}`;
+          iframe.style.display = "block";
+        } else {
+          iframe.style.display = "none";
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const videoInput = document.querySelector("input[name='videoLink']");
+        if (videoInput) updateYoutubePreview(videoInput);
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Quản trị</h2>
+      <a href="/courses">Quay lại trang chủ</a> |
+      <a href="/auth/logout">Đăng xuất</a>
+
+      <% if (action === 'create-course') { %>
+      <!-- Tạo khóa học -->
+      <h3>Tạo khóa học mới</h3>
+      <form action="/courses" method="POST" enctype="multipart/form-data">
+        <div>
+          <label>Tên khóa học:</label>
+          <input type="text" name="name" required />
+        </div>
+        <div>
+          <label>Ngày bắt đầu:</label>
+          <input type="date" name="startDate" required />
+        </div>
+        <div>
+          <label>Thời gian học (tháng):</label>
+          <input type="number" name="duration" min="1" required />
+        </div>
+        <div>
+          <label>Logo:</label>
+          <input
+            type="file"
+            name="logo"
+            accept="image/jpeg,image/png"
+            required
+          />
+        </div>
+        <button type="submit">Tạo khóa học</button>
+      </form>
+
+      <% } else if (action === 'edit-course') { %>
+      <!-- Chỉnh sửa khóa học -->
+      <h3>Chỉnh sửa khóa học</h3>
+      <form
+        action="/courses/edit/<%= course._id %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <label>Tên khóa học:</label>
+          <input type="text" name="name" value="<%= course.name %>" required />
+        </div>
+        <div>
+          <label>Ngày bắt đầu:</label>
+          <input
+            type="date"
+            name="startDate"
+            value="<%= course.startDate.toISOString().split('T')[0] %>"
+            required
+          />
+        </div>
+        <div>
+          <label>Thời gian học (tháng):</label>
+          <input
+            type="number"
+            name="duration"
+            value="<%= course.duration %>"
+            min="1"
+            required
+          />
+        </div>
+        <div>
+          <label>Logo (để nguyên nếu không thay đổi):</label>
+          <input type="file" name="logo" accept="image/jpeg,image/png" />
+        </div>
+        <button type="submit">Cập nhật</button>
+      </form>
+
+      <% } else if (action === 'create-lesson') { %>
+      <!-- Tạo bài học -->
+      <h3>Tạo bài học mới</h3>
+      <form action="/lessons" method="POST">
+        <input type="hidden" name="courseId" value="<%= course._id %>" />
+        <div>
+          <label>Tên bài học:</label>
+          <input type="text" name="name" required />
+        </div>
+        <div>
+          <label>Link tài liệu:</label>
+          <input type="url" name="documentLink" required />
+        </div>
+        <div>
+          <label>Link video (YouTube):</label>
+          <input
+            type="url"
+            name="videoLink"
+            oninput="updateYoutubePreview(this)"
+            required
+          />
+        </div>
+        <iframe
+          id="youtube-preview"
+          width="560"
+          height="315"
+          style="display: none"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+        <button type="submit">Tạo bài học</button>
+      </form>
+
+      <% } else if (action === 'edit-lesson') { %>
+      <!-- Chỉnh sửa bài học -->
+      <h3>Chỉnh sửa bài học</h3>
+      <form action="/lessons/edit/<%= lesson._id %>" method="POST">
+        <div>
+          <label>Tên bài học:</label>
+          <input type="text" name="name" value="<%= lesson.name %>" required />
+        </div>
+        <div>
+          <label>Link tài liệu:</label>
+          <input
+            type="url"
+            name="documentLink"
+            value="<%= lesson.documentLink %>"
+            required
+          />
+        </div>
+        <div>
+          <label>Link video (YouTube):</label>
+          <input
+            type="url"
+            name="videoLink"
+            value="<%= lesson.videoLink %>"
+            oninput="updateYoutubePreview(this)"
+            required
+          />
+        </div>
+        <iframe
+          id="youtube-preview"
+          width="560"
+          height="315"
+          style="display:<%= lesson.videoLink.includes('youtube') ? 'block' : 'none' %>;"
+          src="<% const match = lesson.videoLink.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/); if (match && match[1]) { %>https://www.youtube.com/embed/<%= match[1] %><% } %>"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+        <button type="submit">Cập nhật</button>
+      </form>
+
+      <% } else if (action === 'create-quiz') { %>
+      <!-- Tạo bài kiểm tra -->
+      <h3>Tạo bài kiểm tra mới</h3>
+      <form action="/quizzes" method="POST">
+        <input type="hidden" name="courseId" value="<%= course._id %>" />
+        <div>
+          <label>Tên bài kiểm tra:</label>
+          <input type="text" name="name" required />
+        </div>
+        <div id="questions-container"></div>
+        <button type="button" onclick="addQuestion()">Thêm câu hỏi</button>
+        <button type="submit">Tạo bài kiểm tra</button>
+      </form>
+
+      <% } else if (action === 'edit-quiz') { %>
+      <!-- Chỉnh sửa bài kiểm tra -->
+      <h3>Chỉnh sửa bài kiểm tra</h3>
+      <form action="/quizzes/edit/<%= quiz._id %>" method="POST">
+        <div>
+          <label>Tên bài kiểm tra:</label>
+          <input type="text" name="name" value="<%= quiz.name %>" required />
+        </div>
+        <div id="questions-container">
+          <% quiz.questions.forEach((q, index) => { %>
+          <div class="question">
+            <label>Câu hỏi <%= index + 1 %>:</label>
+            <input
+              type="text"
+              name="questions[<%= index %>][questionText]"
+              value="<%= q.questionText %>"
+              required
+            />
+            <% q.options.forEach((opt, optIndex) => { %>
+            <label>Lựa chọn <%= optIndex + 1 %>:</label>
+            <input
+              type="text"
+              name="questions[<%= index %>][options][<%= optIndex %>]"
+              value="<%= opt %>"
+              required
+            />
+            <% }) %>
+            <label>Đáp án đúng (0-3):</label>
+            <input
+              type="number"
+              name="questions[<%= index %>][correctOption]"
+              value="<%= q.correctOption %>"
+              min="0"
+              max="3"
+              required
+            />
+          </div>
+          <% }) %>
+        </div>
+        <button type="button" onclick="addQuestion()">Thêm câu hỏi</button>
+        <button type="submit">Cập nhật</button>
+      </form>
+      <% } %>
+    </div>
+  </body>
+</html>

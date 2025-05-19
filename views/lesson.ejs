@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= lesson.name %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/scripts.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h2><%= lesson.name %></h2>
+
+    <h3>Video bài giảng</h3>
+    <div id="video-container">
+      <% if (lesson.videoLink.includes("youtube.com") || lesson.videoLink.includes("youtu.be")) { %>
+        <% 
+          let videoId;
+          if (lesson.videoLink.includes("watch?v=")) {
+            videoId = lesson.videoLink.split("watch?v=")[1].split("&")[0];
+          } else if (lesson.videoLink.includes("youtu.be/")) {
+            videoId = lesson.videoLink.split("youtu.be/")[1].split("?")[0];
+          }
+          const embedLink = `https://www.youtube.com/embed/${videoId}`;
+        %>
+        <iframe width="100%" height="500px" src="<%= embedLink %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <% } else { %>
+        <video controls src="<%= lesson.videoLink %>" style="width:100%;"></video>
+      <% } %>
+    </div>
+
+    <h3>Tài liệu</h3>
+    <div id="document-container">
+      <iframe src="<%= lesson.documentLink %>" style="width:100%;height:500px;" frameborder="0"></iframe>
+    </div>
+
+    <h3>Bình luận</h3>
+    <form action="/lessons/<%= lesson._id %>/comments" method="POST">
+      <textarea name="content" required placeholder="Viết bình luận..."></textarea>
+      <button type="submit">Gửi bình luận</button>
+    </form>
+
+    <% if (comments.length === 0) { %>
+      <p>Chưa có bình luận nào.</p>
+    <% } else { %>
+      <% comments.forEach(comment => { %>
+        <div class="comment">
+          <p><strong><%= comment.user.username %></strong>: <%= comment.content %></p>
+          <p><small><%= new Date(comment.createdAt).toLocaleString() %></small></p>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <a href="/courses/<%= lesson.courseId %>">Quay lại khóa học</a>
+  </div>
+</body>
+</html>

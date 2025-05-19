@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kết quả: <%= quiz.name %></title>
+    <link rel="stylesheet" href="/css/quiz-result_styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Kết quả: <%= quiz.name %></h2>
+      <p>Điểm: <%= result.score %> / <%= quiz.questions.length %></p>
+      <% quiz.questions.forEach((question, index) => { %>
+      <div class="question">
+        <p>
+          <strong>Câu <%= index + 1 %>: <%= question.questionText %></strong>
+        </p>
+        <p>
+          Đáp án của bạn: <%= question.options[result.answers[index]] %> <%=
+          result.answers[index] === question.correctOption ? '(Đúng)' : '(Sai)'
+          %>
+        </p>
+        <p>Đáp án đúng: <%= question.options[question.correctOption] %></p>
+      </div>
+      <% }) %>
+      <a href="/quizzes/view/<%= quiz._id %>">Làm lại</a> |
+      <a href="/courses/<%= quiz.courseId %>">Quay lại khóa học</a>
+    </div>
+  </body>
+</html>
