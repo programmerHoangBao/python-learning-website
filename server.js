@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const { connectDB, getDB } = require("./config/db");
-const Course = require('./models/Course');
+const Course = require("./models/Course");
 require("dotenv").config();
 
 // Routes
@@ -35,17 +35,14 @@ app.use("/lessons", lessonRoutes);
 app.use("/quizzes", quizRoutes);
 app.use("/users", userRoutes);
 
-// Trang chủ// Trang chủ
+// Trang chủ
 app.get("/", async (req, res) => {
-  if (!req.session.user) {
-    return res.redirect("/auth/login");
-  }
   const db = getDB();
   const courses = db.collection(Course.collectionName);
   try {
     const courseList = await courses.find({}).toArray();
     res.render("home", {
-      user: req.session.user,
+      user: req.session.user || null, // Pass user if logged in, else null
       courses: courseList,
     });
   } catch (err) {

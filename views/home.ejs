@@ -8,13 +8,20 @@
   </head>
   <body>
     <div class="container">
+      <% if (user) { %>
       <h2>Chào mừng <%= user.username %></h2>
+      <% } else { %>
+      <h2>Chào mừng đến với nền tảng học trực tuyến</h2>
+      <% } %>
       <div class="nav-links">
-        <% if (user.role === 'admin') { %>
-        <a href="/courses/create" class="create">Tạo khóa học mới</a>
-        <% } %>
+        <% if (user) { %> <% if (user.role === 'admin') { %>
+        <a href="/courses/create" class="create">Tạo khóa học mới</a> | <% } %>
         <a href="/users/courses" class="courses">Khóa học của tôi</a> |
         <a href="/auth/logout" class="logout">Đăng xuất</a>
+        <% } else { %>
+        <a href="/auth/login" class="login">Đăng nhập</a> |
+        <a href="/auth/register" class="register">Đăng ký tài khoản</a>
+        <% } %>
       </div>
       <h3>Danh sách khóa học</h3>
       <% if (courses.length === 0) { %>
@@ -35,9 +42,13 @@
           </p>
           <p>Thời gian học: <%= course.duration %> tháng</p>
           <p>Số người tham gia: <%= course.enrolledCount %></p>
+          <% if (user) { %>
           <form action="/courses/register/<%= course._id %>" method="POST">
             <button type="submit">Đăng ký</button>
           </form>
+          <% } else { %>
+          <p><a href="/auth/login">Đăng nhập để đăng ký</a></p>
+          <% } %>
         </li>
         <% }) %>
       </ul>
