@@ -122,6 +122,52 @@ h3::after {
     font-size: 1.2rem;
 }
 
+/* Search form */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-form input[type="text"] {
+    padding: 0.8rem 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-family: 'Poppins', sans-serif;
+    color: #1f2937;
+    background: #ffffff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-form input[type="text"]:focus {
+    outline: none;
+    border-color: #1e40af;
+    box-shadow: 0 0 8px rgba(30, 64, 175, 0.3);
+}
+
+.search-form button {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(to right, #10b981, #059669);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-form button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
 /* Danh sách khóa học */
 ul {
     list-style: none;
@@ -262,6 +308,20 @@ ul li form button:hover {
         text-align: center;
         font-size: 1.2rem;
     }
+
+    .search-form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .search-form input[type="text"] {
+        max-width: 100%;
+    }
+
+    .search-form button {
+        width: 100%;
+        max-width: 200px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -289,5 +349,15 @@ ul li form button:hover {
         width: 100%;
         padding: 0.7rem 1.5rem;
         font-size: 1.1rem;
+    }
+
+    .search-form input[type="text"] {
+        font-size: 1rem;
+        padding: 0.7rem 1rem;
+    }
+
+    .search-form button {
+        font-size: 1rem;
+        padding: 0.7rem 1.5rem;
     }
 }

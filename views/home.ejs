@@ -23,6 +23,16 @@
         <a href="/auth/register" class="register">Đăng ký tài khoản</a>
         <% } %>
       </div>
+      <!-- Search form -->
+      <form action="/courses/search" method="GET" class="search-form">
+        <input
+          type="text"
+          name="query"
+          placeholder="Tìm kiếm khóa học..."
+          required
+        />
+        <button type="submit">Tìm kiếm</button>
+      </form>
       <h3>Danh sách khóa học</h3>
       <% if (courses.length === 0) { %>
       <p>Chưa có khóa học nào.</p>

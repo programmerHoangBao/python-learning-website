@@ -65,6 +65,39 @@ router.get("/create", isAdmin, (req, res) => {
   });
 });
 
+// GET: Tìm kiếm khóa học theo tên
+router.get("/search", async (req, res) => {
+  const db = getDB();
+  const courses = db.collection(Course.collectionName);
+  const query = req.query.query;
+
+  try {
+    if (!query) {
+      return res.render("home", {
+        user: req.session.user,
+        courses: [],
+        error: "Vui lòng nhập từ khóa tìm kiếm",
+      });
+    }
+
+    const courseList = await courses
+      .find({ $text: { $search: query } })
+      .toArray();
+    res.render("home", {
+      user: req.session.user,
+      courses: courseList,
+      searchQuery: query,
+    });
+  } catch (err) {
+    console.error("Error searching courses:", err);
+    res.status(500).render("home", {
+      user: req.session.user,
+      courses: [],
+      error: "Lỗi khi tìm kiếm khóa học",
+    });
+  }
+});
+
 // POST: Tạo khóa học mới (admin)
 router.post("/", isAdmin, upload.single("logo"), async (req, res) => {
   const { name, startDate, duration } = req.body;
