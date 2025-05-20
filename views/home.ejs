@@ -52,11 +52,17 @@
           </p>
           <p>Thời gian học: <%= course.duration %> tháng</p>
           <p>Số người tham gia: <%= course.enrolledCount %></p>
-          <% if (user) { %>
+          <% if (user) { %> <% if (user.registeredCourses &&
+          user.registeredCourses.some(id => id.toString() ===
+          course._id.toString())) { %>
+          <a href="/courses/<%= course._id %>" class="access-button"
+            >Truy cập</a
+          >
+          <% } else { %>
           <form action="/courses/register/<%= course._id %>" method="POST">
             <button type="submit">Đăng ký</button>
           </form>
-          <% } else { %>
+          <% } %> <% } else { %>
           <p><a href="/auth/login">Đăng nhập để đăng ký</a></p>
           <% } %>
         </li>

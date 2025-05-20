@@ -69,6 +69,7 @@ router.get("/create", isAdmin, (req, res) => {
 router.get("/search", async (req, res) => {
   const db = getDB();
   const courses = db.collection(Course.collectionName);
+  const users = db.collection(User.collectionName);
   const query = req.query.query;
 
   try {
@@ -83,8 +84,15 @@ router.get("/search", async (req, res) => {
     const courseList = await courses
       .find({ $text: { $search: query } })
       .toArray();
+    let user = req.session.user || null;
+
+    // Nếu người dùng đã đăng nhập, lấy thông tin đầy đủ từ collection users
+    if (user) {
+      user = await users.findOne({ _id: new ObjectId(user._id) });
+    }
+
     res.render("home", {
-      user: req.session.user,
+      user: user,
       courses: courseList,
       searchQuery: query,
     });
@@ -97,6 +105,7 @@ router.get("/search", async (req, res) => {
     });
   }
 });
+
 
 // POST: Tạo khóa học mới (admin)
 router.post("/", isAdmin, upload.single("logo"), async (req, res) => {

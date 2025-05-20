@@ -39,10 +39,19 @@ app.use("/users", userRoutes);
 app.get("/", async (req, res) => {
   const db = getDB();
   const courses = db.collection(Course.collectionName);
+  const users = db.collection(User.collectionName);
+
   try {
     const courseList = await courses.find({}).toArray();
+    let user = req.session.user || null;
+
+    // Nếu người dùng đã đăng nhập, lấy thông tin đầy đủ từ collection users
+    if (user) {
+      user = await users.findOne({ _id: new require("mongodb").ObjectId(user._id) });
+    }
+
     res.render("home", {
-      user: req.session.user || null, // Pass user if logged in, else null
+      user: user,
       courses: courseList,
     });
   } catch (err) {
