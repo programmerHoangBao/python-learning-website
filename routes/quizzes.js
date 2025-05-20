@@ -207,6 +207,14 @@ router.get('/view/:id', isAuthenticated, async (req, res) => {
       return res.status(404).send('Bài kiểm tra không tồn tại');
     }
 
+    // Nếu là admin thì cho truy cập thoải mái
+    if (req.session.user.role === 'admin') {
+      return res.render('quiz', {
+        user: req.session.user,
+        quiz
+      });
+    }
+    
     const user = await users.findOne({ _id: new ObjectId(req.session.user._id) });
     if (!user || !user.registeredCourses) {
       return res.status(403).send('Bạn cần đăng ký khóa học để làm bài kiểm tra');
