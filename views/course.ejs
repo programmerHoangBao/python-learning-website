@@ -1,84 +1,240 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= course.name %></title>
-    <link rel="stylesheet" href="/css/course_styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h2><%= course.name %></h2>
-      <img
-        src="<%= course.logo %>"
-        alt="<%= course.name %>"
-        style="width: 200px"
-      />
-      <p>
-        Thời gian bắt đầu: <%= new Date(course.startDate).toLocaleDateString()
-        %>
-      </p>
-      <p>Thời gian học: <%= course.duration %> tháng</p>
-      <p>Số người tham gia: <%= course.enrolledCount %></p>
-      <% if (user.role === 'admin') { %>
-      <a href="/courses/edit/<%= course._id %>">Chỉnh sửa</a> |
-      <form
-        action="/courses/delete/<%= course._id %>"
-        method="POST"
-        style="display: inline"
-      >
-        <button type="submit">Xóa</button>
-      </form>
-      <% } %>
-      <h3>Bài học</h3>
-      <% if (lessons.length === 0) { %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= course.name %></title>
+  <link rel="stylesheet" href="/css/course_styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      background-color: #f4f7f9;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    h2 {
+      color: #2c3e50;
+      font-size: 2.5em;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    h3 {
+      color: #34495e;
+      font-size: 1.8em;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    img {
+      display: block;
+      width: 350px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 20px auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    p {
+      color: #7f8c8d;
+      font-size: 1.2em;
+      margin: 10px 0;
+      text-align: center;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 700px;
+    }
+    li {
+      padding: 20px;
+      border-bottom: 1px solid #ecf0f1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    li a {
+      color: #2980b9;
+      font-size: 1.3em;
+      text-decoration: none;
+    }
+    li a:hover {
+      text-decoration: underline;
+      color: #2471a3;
+    }
+    .admin-links {
+      margin: 20px 0;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+    .admin-actions {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+    .admin-links a, .admin-links button, .admin-actions a, .admin-actions button, .create-link a, .back-link a {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 1.1em;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+    .admin-links a, .admin-actions a, .create-link a {
+      color: #fff;
+      background-color: #2980b9;
+      border: 1px solid #2980b9;
+    }
+    .admin-links a:hover, .admin-actions a:hover, .create-link a:hover {
+      background-color: #2471a3;
+      border-color: #2471a3;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .admin-links button, .admin-actions button {
+      color: #fff;
+      background-color: #e74c3c;
+      border: 1px solid #e74c3c;
+    }
+    .admin-links button:hover, .admin-actions button:hover {
+      background-color: #c0392b;
+      border-color: #c0392b;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .create-link {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .back-link {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .back-link a {
+      color: #fff;
+      background-color: #f39c12;
+      border: 1px solid #f39c12;
+    }
+    .back-link a:hover {
+      background-color: #e67e22;
+      border-color: #e67e22;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2><%= course.name %></h2>
+    <img src="<%= course.logo || '/images/default.png' %>" alt="<%= course.name %>">
+    <p>Thời gian bắt đầu: <%= new Date(course.startDate).toLocaleDateString() %></p>
+    <p>Thời gian học: <%= course.duration %> tháng</p>
+    <p>Số người tham gia: <%= course.enrolledCount %></p>
+
+    <% if (user.role === 'admin') { %>
+      <div class="admin-links">
+        <a href="/courses/edit/<%= course._id %>">Chỉnh sửa khóa học</a>
+        <form action="/courses/delete/<%= course._id %>?_method=DELETE" method="POST" class="delete-form" style="display: inline">
+          <button type="submit">Xóa khóa học</button>
+        </form>
+      </div>
+    <% } %>
+
+    <h3>Bài học</h3>
+    <% if (lessons.length === 0) { %>
       <p>Chưa có bài học nào.</p>
-      <% } else { %>
+    <% } else { %>
       <ul>
         <% lessons.forEach(lesson => { %>
-        <li>
-          <a href="/lessons/view/<%= lesson._id %>"><%= lesson.name %></a>
-          <% if (user.role === 'admin') { %>
-          <a href="/lessons/edit/<%= lesson._id %>">Chỉnh sửa</a> |
-          <form
-            action="/lessons/delete/<%= lesson._id %>"
-            method="POST"
-            style="display: inline"
-          >
-            <button type="submit">Xóa</button>
-          </form>
-          <% } %>
-        </li>
+          <li>
+            <a href="/lessons/view/<%= lesson._id %>"><%= lesson.name %></a>
+            <% if (user.role === 'admin') { %>
+              <div class="admin-actions">
+                <a href="/lessons/edit/<%= lesson._id %>">Chỉnh sửa</a>
+                <form action="/lessons/delete/<%= lesson._id %>?_method=DELETE" method="POST" class="delete-form" style="display: inline">
+                  <button type="submit">Xóa</button>
+                </form>
+              </div>
+            <% } %>
+          </li>
         <% }) %>
       </ul>
-      <% } %> <% if (user.role === 'admin') { %>
-      <a href="/lessons/create/<%= course._id %>">Tạo bài học mới</a>
-      <% } %>
-      <h3>Bài kiểm tra</h3>
-      <% if (quizzes.length === 0) { %>
+    <% } %>
+
+    <% if (user.role === 'admin') { %>
+      <div class="create-link">
+        <a href="/lessons/create/<%= course._id %>">Tạo bài học mới</a>
+      </div>
+    <% } %>
+
+    <h3>Bài kiểm tra</h3>
+    <% if (quizzes.length === 0) { %>
       <p>Chưa có bài kiểm tra nào.</p>
-      <% } else { %>
+    <% } else { %>
       <ul>
         <% quizzes.forEach(quiz => { %>
-        <li>
-          <a href="/quizzes/view/<%= quiz._id %>"><%= quiz.name %></a>
-          <% if (user.role === 'admin') { %>
-          <a href="/quizzes/edit/<%= quiz._id %>">Chỉnh sửa</a> |
-          <form
-            action="/quizzes/delete/<%= quiz._id %>"
-            method="POST"
-            style="display: inline"
-          >
-            <button type="submit">Xóa</button>
-          </form>
-          <% } %>
-        </li>
+          <li>
+            <a href="/quizzes/view/<%= quiz._id %>"><%= quiz.name %></a>
+            <% if (user.role === 'admin') { %>
+              <div class="admin-actions">
+                <a href="/lessons/edit/<%= quiz._id %>">Chỉnh sửa</a>
+                <form action="/quizzes/delete/<%= quiz._id %>?_method=DELETE" method="POST" class="delete-form" style="display: inline">
+                  <button type="submit">Xóa</button>
+                </form>
+              </div>
+            <% } %>
+          </li>
         <% }) %>
       </ul>
-      <% } %> <% if (user.role === 'admin') { %>
-      <a href="/quizzes/create/<%= course._id %>">Tạo bài kiểm tra mới</a>
-      <% } %>
-      <br /><a href="/users/courses">Quay lại khóa học của tôi</a>
+    <% } %>
+
+    <% if (user.role === 'admin') { %>
+      <div class="create-link">
+        <a href="/quizzes/create/<%= course._id %>">Tạo bài kiểm tra mới</a>
+      </div>
+    <% } %>
+
+    <div class="back-link">
+      <a href="/">Quay lại trang chủ</a>
     </div>
-  </body>
+  </div>
+
+  <script>
+    document.querySelectorAll('.delete-form').forEach(form => {
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const result = await Swal.fire({
+          title: 'Bạn có chắc chắn?',
+          text: 'Hành động này không thể hoàn tác!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Xóa',
+          cancelButtonText: 'Hủy'
+        });
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  </script>
+</body>
 </html>

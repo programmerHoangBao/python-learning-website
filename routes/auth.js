@@ -96,7 +96,9 @@ router.get('/login', (req, res) => {
   res.render('login', { error: null });
 });
 
+// handle login
 router.post('/login', async (req, res) => {
+  // get data
   const { username, password } = req.body;
   const db = getDB();
   const users = db.collection(User.collectionName);
@@ -110,6 +112,8 @@ router.post('/login', async (req, res) => {
   res.redirect('/');
 });
 
+
+// Logout
 router.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/auth/login');
