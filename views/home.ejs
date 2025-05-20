@@ -14,13 +14,17 @@
       <h2>Chào mừng đến với nền tảng học trực tuyến</h2>
       <% } %>
       <div class="nav-links">
-        <% if (user) { %> <% if (user.role === 'admin') { %>
-        <a href="/courses/create" class="create">Tạo khóa học mới</a> | <% } %>
-        <a href="/users/courses" class="courses">Khóa học của tôi</a> |
-        <a href="/auth/logout" class="logout">Đăng xuất</a>
+        <% if (user) { %>
+          <% if (user.role === 'admin') { %>
+            <a href="/courses/create" class="create">Tạo khóa học mới</a> |
+          <% } %>
+          <% if (user.role === 'user') { %>
+            <a href="/users/courses" class="courses">Khóa học của tôi</a> |
+          <% } %>
+          <a href="/auth/logout" class="logout">Đăng xuất</a>
         <% } else { %>
-        <a href="/auth/login" class="login">Đăng nhập</a> |
-        <a href="/auth/register" class="register">Đăng ký tài khoản</a>
+          <a href="/auth/login" class="login">Đăng nhập</a> |
+          <a href="/auth/register" class="register">Đăng ký tài khoản</a>
         <% } %>
       </div>
       <!-- Search form -->
@@ -52,18 +56,23 @@
           </p>
           <p>Thời gian học: <%= course.duration %> tháng</p>
           <p>Số người tham gia: <%= course.enrolledCount %></p>
-          <% if (user) { %> <% if ( user.registeredCourses &&
-          user.registeredCourses.some(id => id.toString() ===
-          course._id.toString()) ) { %>
-          <a href="/courses/<%= course._id %>" class="access-button"
-            >Truy cập</a
-          >
+          <% if (user && user.role === 'admin') { %>
+            <form action="/courses/register/<%= course._id %>" method="POST">
+              <button type="submit">Quản lý</button>
+            </form>
+          <% } else if (user) { %>
+            <% if (
+              user.registeredCourses &&
+              user.registeredCourses.some(id => id.toString() === course._id.toString())
+            ) { %>
+              <a href="/courses/<%= course._id %>" class="access-button">Truy cập</a>
+            <% } else { %>
+              <form action="/courses/register/<%= course._id %>" method="POST">
+                <button type="submit">Đăng ký</button>
+              </form>
+            <% } %>
           <% } else { %>
-          <form action="/courses/register/<%= course._id %>" method="POST">
-            <button type="submit">Đăng ký</button>
-          </form>
-          <% } %> <% } else { %>
-          <p><a href="/auth/login">Đăng nhập để đăng ký</a></p>
+            <p><a href="/auth/login">Đăng nhập để đăng ký</a></p>
           <% } %>
         </li>
         <% }) %>

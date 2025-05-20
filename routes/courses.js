@@ -253,7 +253,10 @@ router.post("/register/:id", async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/auth/login");
   }
-
+  // Nếu là admin, cho truy cập luôn mà không cần đăng ký
+  if (req.session.user.role === "admin") {
+    return res.redirect(`/courses/${req.params.id}`);
+  }
   const db = getDB();
   const courses = db.collection(Course.collectionName);
   const users = db.collection(User.collectionName);
