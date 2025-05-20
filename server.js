@@ -3,6 +3,8 @@ const session = require("express-session");
 const path = require("path");
 const { connectDB, getDB } = require("./config/db");
 const Course = require("./models/Course");
+const User = require("./models/User"); // Thêm import User
+const { ObjectId } = require("mongodb");
 require("dotenv").config();
 
 // Routes
@@ -46,8 +48,8 @@ app.get("/", async (req, res) => {
     let user = req.session.user || null;
 
     // Nếu người dùng đã đăng nhập, lấy thông tin đầy đủ từ collection users
-    if (user) {
-      user = await users.findOne({ _id: new require("mongodb").ObjectId(user._id) });
+    if (user && user._id) {
+      user = await users.findOne({ _id: new ObjectId(user._id) });
     }
 
     res.render("home", {
