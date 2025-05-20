@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="/css/course_styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+      h3 {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Dashboard Admin</h2>
+
+      <!-- Thống kê bài học theo khóa học -->
+      <h3>Số bài học theo khóa học</h3>
+      <% if (lessonStats.length === 0) { %>
+      <p>Chưa có dữ liệu bài học.</p>
+      <% } else { %>
+      <table>
+        <tr>
+          <th>Khóa học</th>
+          <th>Số bài học</th>
+        </tr>
+        <% lessonStats.forEach(stat => { %>
+        <tr>
+          <td><%= stat.courseName %></td>
+          <td><%= stat.totalLessons %></td>
+        </tr>
+        <% }) %>
+      </table>
+      <% } %>
+
+      <!-- Thống kê bài kiểm tra -->
+      <h3>Thống kê bài kiểm tra</h3>
+      <% if (quizStats.length === 0) { %>
+      <p>Chưa có kết quả bài kiểm tra.</p>
+      <% } else { %>
+      <table>
+        <tr>
+          <th>Bài kiểm tra</th>
+          <th>Điểm trung bình</th>
+          <th>Số lần làm bài</th>
+        </tr>
+        <% quizStats.forEach(stat => { %>
+        <tr>
+          <td><%= stat.quizName %></td>
+          <td><%= stat.avgScore %></td>
+          <td><%= stat.totalAttempts %></td>
+        </tr>
+        <% }) %>
+      </table>
+      <% } %>
+
+      <!-- Top 5 học viên xuất sắc -->
+      <h3>Top 5 học viên xuất sắc</h3>
+      <% if (userStats.length === 0) { %>
+      <p>Chưa có dữ liệu học viên.</p>
+      <% } else { %>
+      <table>
+        <tr>
+          <th>Tên người dùng</th>
+          <th>Tổng điểm</th>
+          <th>Số lần làm bài</th>
+          <th>Điểm trung bình</th>
+        </tr>
+        <% userStats.forEach(stat => { %>
+        <tr>
+          <td><%= stat.username %></td>
+          <td><%= stat.totalScore %></td>
+          <td><%= stat.totalAttempts %></td>
+          <td><%= stat.avgScore %></td>
+        </tr>
+        <% }) %>
+      </table>
+      <% } %>
+
+      <br /><a href="/">Quay lại khóa học</a>
+    </div>
+  </body>
+</html>

@@ -37,6 +37,9 @@ app.use("/lessons", lessonRoutes);
 app.use("/quizzes", quizRoutes);
 app.use("/users", userRoutes);
 
+const adminRoutes = require('./routes/admin');
+app.use('/admin', adminRoutes);
+
 // Trang chủ
 app.get("/", async (req, res) => {
   const db = getDB();
