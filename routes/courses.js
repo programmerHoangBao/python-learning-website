@@ -248,7 +248,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST: Người dùng đăng ký khóa học
+// POST: Người dùng khóa học
 router.post("/register/:id", async (req, res) => {
   if (!req.session.user) {
     return res.redirect("/auth/login");
