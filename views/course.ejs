@@ -194,7 +194,7 @@
             <a href="/quizzes/view/<%= quiz._id %>"><%= quiz.name %></a>
             <% if (user.role === 'admin') { %>
               <div class="admin-actions">
-                <a href="/lessons/edit/<%= quiz._id %>">Chỉnh sửa</a>
+                <a href="/quizzes/edit/<%= quiz._id %>">Chỉnh sửa</a>
                 <form action="/quizzes/delete/<%= quiz._id %>?_method=DELETE" method="POST" class="delete-form" style="display: inline">
                   <button type="submit">Xóa</button>
                 </form>
